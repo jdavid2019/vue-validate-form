@@ -26,16 +26,20 @@
           placeholder="Escribir un correo"
         />
       </p>
+      <div v-if="submited && !$v.contacto.correo.required" class="alert alert-danger">El campo nombre es obligatorio</div>
+          <div v-if="submited && !$v.contacto.correo.email" class="alert alert-danger">Ingrese un email válido</div>
       <p>
         <label>Teléfono :</label>
         <input
-          type="text"
+          type="number"
           class="form-control"
           name="telefono"
           v-model="contacto.telefono"
           placeholder="Escribir un teléfono"
         />
       </p>
+     <div v-if="submited && !$v.contacto.telefono.required" class="alert alert-danger">El campo teléfono es requerido</div>
+     <div v-if="submited && !$v.contacto.telefono.maxLength" class="alert alert-danger">El campo telefono no debe superar los 9 dígitos</div>
 
       <p>
         <label>Mensaje :</label>
@@ -49,6 +53,10 @@
           placeholder="Escribe un mensaje ..."
         ></textarea>
       </p>
+           <div v-if="submited && !$v.contacto.mensaje.required" class="alert alert-danger">El campo mensaje es requerido</div>
+
+    <div v-if="submited && !$v.contacto.mensaje.maxLength" class="alert alert-danger">El campo mensaje no debe superar los 300 caracteres</div>
+
       <hr />
       <input type="submit" value="Enviar datos" class="btn btn-success" />
     </form>
@@ -57,7 +65,7 @@
 
 <script>
 //2
-import { required, minLength, email } from 'vuelidate/lib/validators';
+import { required, minLength, email, maxLength} from 'vuelidate/lib/validators';
 //ejecuta binding
 export default {
   name: "Form",
@@ -94,6 +102,14 @@ export default {
         required,
         minLength: minLength(2),
         email
+      },
+      telefono: {
+        required,
+        maxLength: maxLength (9)
+      },
+        mensaje: {
+        required,
+        maxLength: maxLength (300)
       }
     }
   }
