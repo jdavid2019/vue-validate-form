@@ -24,6 +24,25 @@ import 'bootstrap';
 import './assets/app.css'
 
 
+--- para instalar vue validate
+
+npm install --save vuelidate
+
+https://vuelidate.js.org/#getting-started
 
 
+luego en main.js importo el siguiente comando
+
+import Vuelidate from 'vuelidate';
+
+y esto
+
+Vue.config.productionTip = false
+Vue.use(Vuelidate);
+
+
+luego en mi script de mi proyecto form.vue importo las validaciones
+que quiero
+<script>
+import {required,minLenght} from 'vuelidate/lib/validators';
 
