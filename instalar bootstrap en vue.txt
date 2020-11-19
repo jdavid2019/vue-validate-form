@@ -1,0 +1,29 @@
+https://www.youtube.com/watch?v=RPZA0yEY0Us
+
+npm install bootstrap jquery popper.js
+
+
+luego en main.js
+
+import 'bootstrap';
+
+
+
+luego en la carpeta asssets creamos un archivo app.css y importamos 
+
+alt+126
+@import '~bootstrap/dist/css/bootstrap.css';
+
+
+
+y luego en el main.js lo llamamos
+
+import 'jquery';
+import 'popper.js';
+import 'bootstrap';
+import './assets/app.css'
+
+
+
+
+
