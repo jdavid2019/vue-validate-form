@@ -40,6 +40,17 @@
       </p>
      <div v-if="submited && !$v.contacto.telefono.required" class="alert alert-danger">El campo teléfono es requerido</div>
      <div v-if="submited && !$v.contacto.telefono.maxLength" class="alert alert-danger">El campo telefono no debe superar los 9 dígitos</div>
+        <p>
+            <label>Seleccionar tu país</label>
+           <!-- <select class="form-control form-control-lg" > -->
+               <select class="form-control" v-model.trim="contacto.pais" >
+                <option value="" >Selecciona tu país</option>
+                <option  v-for="c in listaPaises" :value="c.alpha3Code" :key="c.alpha3Code"  >
+                     {{ c.name }} 
+                </option>
+            </select>
+        </p>
+             <div v-if="submited && !$v.contacto.pais.required" class="alert alert-danger">La selección es requerida</div>
 
       <p>
         <label>Mensaje :</label>
@@ -56,6 +67,44 @@
            <div v-if="submited && !$v.contacto.mensaje.required" class="alert alert-danger">El campo mensaje es requerido</div>
 
     <div v-if="submited && !$v.contacto.mensaje.maxLength" class="alert alert-danger">El campo mensaje no debe superar los 300 caracteres</div>
+    <p>
+        <label>Edad :</label>
+        <input
+          type="number"
+          class="form-control"
+          name="edad"
+          v-model="contacto.edad"
+          placeholder="Escribir su edad"
+        />
+      </p>
+                 <div v-if="submited && !$v.contacto.edad.required" class="alert alert-danger">El campo edad es requerido</div>
+
+          <div v-if="submited && !$v.contacto.edad.between" class="alert alert-danger">El campo edad no puede ser menor a 18 ni mayor a 80</div>
+         <p>
+        <label>Url :</label>
+        <input
+          type="text"
+          class="form-control"
+          name="url"
+          v-model="contacto.url"
+          placeholder="Ingresar tu url de página"
+        />
+      </p>
+                <div v-if="submited && !$v.contacto.url.url" class="alert alert-danger">Ingrese una url válida</div>
+
+
+<p>
+        <label>Escribe cool :</label>
+        <input
+          type="text"
+          class="form-control"
+          name="cools"
+          v-model="contacto.cools"
+          placeholder="Escribe cool"
+          maxlength="4"
+        />
+      </p>
+                <div v-if="submited && !$v.contacto.cools.mustBeCool" class="alert alert-danger">No ha escrito cool</div>
 
       <hr />
       <input type="submit" value="Enviar datos" class="btn btn-success" />
@@ -65,8 +114,9 @@
 
 <script>
 //2
-import { required, minLength, email, maxLength} from 'vuelidate/lib/validators';
+import { required, minLength, email, maxLength ,between,url } from 'vuelidate/lib/validators';
 //ejecuta binding
+const mustBeCool = (value) => value.indexOf('cool') >= 0
 export default {
   name: "Form",
   data() {
@@ -77,20 +127,17 @@ export default {
         nombre: '',
         correo: '',
         telefono: '',
-        mensaje: ''
+        mensaje: '',
+        pais : '',
+        edad : '',
+        url : '',
+        cools: ''
+       
       },
+       listaPaises: []
     };
   },
-  methods: {
-    procesar() {
-        this.submited = true;
-        this.$v.$touch();
-      if (this.$v.$invalid) {
-        return false;
-      }
-      alert(this.contacto.nombre);
-    }
-  },
+  
   //3
   validations: {
     contacto: {
@@ -110,7 +157,53 @@ export default {
         mensaje: {
         required,
         maxLength: maxLength (300)
+      },
+        pais: {
+        required
+       
+      },
+       edad: {
+        required,
+        between: between(18,80)
+       
+      },
+      url: {
+        url
+       
+      },
+      cools: {
+          mustBeCool
       }
+    }
+  },
+
+  //llamado a los paises
+  mounted: function(){
+      var v = this;
+      v.$http.get('https://restcountries.eu/rest/v2/all')
+      .then(function(resp){
+          v.listaPaises = resp.data;
+      })
+      .catch(function(err){
+          console.log(err)
+      });
+  },
+  methods: {
+      formateardata: function(){
+          this.nombre= '';
+          this.telefono='';
+          this.pais='';
+          this.mensaje='';
+      },
+    procesar() {
+        this.submited = true;
+        this.$v.$touch();
+      if (this.$v.$invalid) {
+        return false;
+      }
+      alert('Data enviada');
+      
+    //  this.formateardata();
     }
   }
 }

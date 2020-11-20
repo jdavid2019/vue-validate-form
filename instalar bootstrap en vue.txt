@@ -46,3 +46,11 @@ que quiero
 <script>
 import {required,minLenght} from 'vuelidate/lib/validators';
 
+
+data de todos los paises json
+
+npm install json-server --save-dev
+npm i npm-run-all --save-dev
+
+instalo axios
+npm i axios
